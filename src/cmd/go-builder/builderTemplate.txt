@@ -1,0 +1,45 @@
+package {{.PName}}
+
+type {{.IName}}Builder struct {
+	{{range $val := .Fields -}}
+	{{$val.BuilderAttribute}} {{$val.TypeName}} `yaml:"{{$val.BuilderAttribute}}" json:"{{$val.BuilderAttribute}}" form:"{{$val.BuilderAttribute}}"`
+	{{- end}}
+}
+
+{{range $val := .Fields -}}
+func (my {{$.SName}}) {{$val.StructMethod}}() {{$val.TypeName}} {
+	return my.{{$val.StructAttribute}}
+}
+{{- end}}
+
+{{range $val := .Fields -}}
+func (builder *{{$.IName}}Builder) {{$val.BuilderMethod}}({{$val.BuilderAttribute}} {{$val.TypeName}}) *{{$.IName}}Builder {
+	builder.{{$val.BuilderAttribute}} = {{$val.BuilderAttribute}}
+	return builder
+}
+{{- end}}
+
+func (builder *{{.IName}}Builder) From(source {{.IName}}) *{{.IName}}Builder {
+	*builder = {{.IName}}Builder{
+		{{range $val := .Fields -}}
+		{{$val.BuilderAttribute}}: source.{{$val.StructMethod}}(),
+		{{- end}}
+	}
+	return builder
+}
+
+func (builder *{{.IName}}Builder) Copy() *{{.IName}}Builder {
+	return &{{.IName}}Builder{
+		{{range $val := .Fields -}}
+		{{$val.BuilderAttribute}}: builder.{{$val.BuilderAttribute}},
+		{{- end}}
+	}
+}
+
+func (builder *{{.IName}}Builder) Build() {{.IName}} {
+	return {{.SName}}{
+		{{range $val := .Fields -}}
+		{{$val.StructAttribute}}: builder.{{$val.BuilderAttribute}},
+		{{- end}}
+	}
+}

@@ -1,6 +1,12 @@
 # go-builder
 A builder generation tool for go structs.
 
+# Install
+
+```bash
+go install github.com/npxcomplete/go-builder/src/cmd/go-builder
+```
+
 # Usage Example 
 
 ##### Declared code:
@@ -55,3 +61,9 @@ func (builder *MyInterfaceBuilder) Build() MyInterface {
 	}
 }
 ```
+
+# Planned features
+
+* Omit generated methods if present in input file.
+* Copy tags from struct
+* Special handling & deep copy for pointers / slices / maps
